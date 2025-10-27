@@ -48,4 +48,4 @@ project_name/
 └── README.md
 ```
 
-Quickstart 与运行同之前说明，详见仓库内 README。
+Quickstart 与运行同之前说明，详见仓库内 README.
