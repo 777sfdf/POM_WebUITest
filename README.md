@@ -1,46 +1,51 @@
-# Selenium + pytest + POM + YAML + Logger + Allure Demo
+# POM Web UI Test Demo
 
-This demo shows a layered POM-style test project using:
+这是一个基于 POM（Page Object Model）分层设计的 Web UI 自动化工程示例，演示如何组织测试用例、页面对象、公共工具、配置与数据分离。
+
+主要技术栈：
 - Python 3.12
 - selenium==4.37.0
 - pytest
 - allure-pytest==2.18.1
-- yaml for configuration
-- custom logger
-- webdriver-manager to manage chromedriver
+- PyYAML
+- webdriver-manager
 
-Project structure
+项目结构示例
 ```
-.
-├── config
-│   └── config.yaml
-├── pages
+project_name/
+├── testcases/                 # 测试用例层（核心业务场景）
+│   ├── __init__.py
+│   ├── test_login.py
+│   └── test_order.py
+├── pageobjects/               # 页面对象层
+│   ├── __init__.py
 │   ├── base_page.py
 │   ├── login_page.py
-│   └── secure_page.py
-├── tests
-│   └── test_login.py
-├── utils
+│   └── order_page.py
+├── common/                    # 公共工具层
+│   ├── __init__.py
 │   ├── logger.py
-│   ├── yaml_utils.py
-│   └── helpers.py
+│   ├── config_utils.py
+│   ├── screenshot.py
+│   └── send_email.py
+├── config/
+│   ├── __init__.py
+│   ├── config.ini
+│   └── environment.yaml
+├── data/
+│   ├── __init__.py
+│   ├── login_data.json
+│   └── order_data.json
+├── drivers/
+│   └── .gitkeep
+├── logs/
+│   └── .gitkeep
+├── reports/
+│   └── .gitkeep
 ├── conftest.py
-├── pytest.ini
+├── run.py
 ├── requirements.txt
-├── .gitignore
 └── README.md
 ```
 
-Quickstart
-1. Create a venv with Python 3.12
-2. pip install -r requirements.txt
-3. Run tests and write allure results:
-   pytest -q --alluredir=allure-results
-4. View allure report (requires Allure CLI):
-   - Install Allure CLI (https://docs.qameta.io/allure/)
-   - Serve report:
-     allure serve allure-results
-
-Notes
-- Tests use https://the-internet.herokuapp.com/login as demo site.
-- Update config/config.yaml if you want headless mode or different browser.
+Quickstart 与运行同之前说明，详见仓库内 README。
