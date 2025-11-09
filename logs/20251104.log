@@ -1,0 +1,12 @@
+2025-11-04 18:07:36,988 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-11-04 18:07:36,989 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:07:36,989 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:12:35,352 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-11-04 18:12:35,352 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:12:35,353 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:17:10,651 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-11-04 18:17:10,652 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:17:10,652 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:19:22,702 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-11-04 18:19:22,702 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-11-04 18:19:22,703 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe

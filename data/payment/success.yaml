@@ -1,0 +1,8 @@
+- id: PAY-SUCCESS-001
+  title: 模拟支付成功后订单状态为已支付
+  input:
+    payment_method: "mock"
+  expected:
+    ok: true
+    order_status: "paid"
+  marks: ["smoke"]

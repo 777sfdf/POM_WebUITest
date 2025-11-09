@@ -1,0 +1,10 @@
+- id: CHK-SUM-001
+  title: 结算页加载并正确展示应付金额（无优惠）
+  input:
+    use_address: "default"
+    shipping_method: "default"
+    payment_method: "mock"
+  expected:
+    ok: true
+    total_positive: true
+  marks: ["smoke"]

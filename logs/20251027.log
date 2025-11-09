@@ -1,0 +1,39 @@
+2025-10-27 11:57:09,336 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 13:52:00,519 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 13:52:00,520 - INFO - project_TestWebUI - Using webdriver_manager to obtain chromedriver
+2025-10-27 13:59:09,652 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 13:59:09,658 - INFO - project_TestWebUI - Using webdriver_manager to obtain chromedriver
+2025-10-27 13:59:12,008 - INFO - project_TestWebUI - webdriver_manager returned: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 13:59:12,009 - INFO - project_TestWebUI - Final chromedriver executable: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:07:45,534 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:07:45,535 - INFO - project_TestWebUI - Local chromedriver not found, using webdriver_manager
+2025-10-27 14:07:47,880 - INFO - project_TestWebUI - webdriver_manager returned: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:07:47,880 - INFO - project_TestWebUI - Final chromedriver executable: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:09:39,235 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:09:39,237 - INFO - project_TestWebUI - Local chromedriver not found, using webdriver_manager
+2025-10-27 14:09:41,469 - INFO - project_TestWebUI - webdriver_manager returned: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:09:41,469 - INFO - project_TestWebUI - Final chromedriver executable: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:12:13,710 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:12:13,711 - INFO - project_TestWebUI - Local chromedriver not found, using webdriver_manager
+2025-10-27 14:12:15,998 - INFO - project_TestWebUI - webdriver_manager returned: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:12:15,998 - INFO - project_TestWebUI - Final chromedriver executable: C:\Users\admin\.wdm\drivers\chromedriver\win64\141.0.7390.122\chromedriver-win32/THIRD_PARTY_NOTICES.chromedriver
+2025-10-27 14:13:26,517 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:13:26,517 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:13:26,518 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:13:33,568 - INFO - project_TestWebUI - Opened login page
+2025-10-27 14:16:25,864 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:16:25,865 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:16:25,865 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:16:30,389 - INFO - project_TestWebUI - Opened login page
+2025-10-27 14:18:57,780 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:18:57,781 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:18:57,781 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:19:02,684 - INFO - project_TestWebUI - Opened login page
+2025-10-27 14:21:26,681 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:21:26,682 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:21:26,682 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:21:31,103 - INFO - project_TestWebUI - Opened login page
+2025-10-27 14:25:28,108 - INFO - project_TestWebUI - Loaded environment config for: dev
+2025-10-27 14:25:28,109 - INFO - project_TestWebUI - Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:25:28,109 - INFO - project_TestWebUI - Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe
+2025-10-27 14:25:33,311 - INFO - project_TestWebUI - Opened login page

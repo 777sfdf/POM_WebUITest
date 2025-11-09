@@ -1,0 +1,12 @@
+dev:
+  base_url: "http://localhost"
+  username: "ecshop"
+  password: "ecshop"
+staging:
+  base_url: "http://localhost"
+  username: "ecshop"
+  password: "ecshop!"
+prod:
+  base_url: "http://localhost"
+  username: "ecshop"
+  password: "ecshop!"

@@ -1,0 +1,22 @@
+- id: CART-ADD-001
+  title: 将商品加入购物车成功（数量1）
+  input:
+    product_keyword: "nokia"
+    sku: ""
+    quantity: 1
+  expected:
+    ok: true
+    cart_count_delta: 1
+  marks: ["smoke"]
+
+- id: CART-UPDATE-002
+  title: 购物车修改数量在库存范围内成功
+  input:
+    product_keyword: "nokia"
+    sku: ""
+    start_qty: 1
+    change_to: 2
+  expected:
+    ok: true
+    final_qty: 2
+  marks: ["smoke"]

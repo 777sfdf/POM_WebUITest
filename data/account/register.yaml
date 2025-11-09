@@ -1,0 +1,22 @@
+- id: ACC-REG-001
+  title: 使用有效邮箱注册成功并自动登录或跳转登录
+  input:
+#    email: "newuser_${rand}@example.com"
+    username: "newuser_${rand}"
+    password: "Passw0rd!"
+#    confirm_password: "Passw0rd!"
+  expected:
+    ok: true
+  marks: ["smoke"]
+
+- id: ACC-REG-002
+  title: 已存在邮箱注册被拦截
+  input:
+#    email: "ecshop@example.com"
+    username: "ecshop"
+    password: "Passw0rd!"
+#    confirm_password: "Passw0rd!"
+  expected:
+    ok: false
+    message_contains: "已存在"
+  marks: ["smoke", "negative"]

@@ -1,0 +1,9 @@
+- id: CTLG-SEARCH-001
+  title: 关键字搜索返回结果
+  input:
+    keyword: "nokia"
+    category: ""
+    expected_min_results: 1
+  expected:
+    ok: true
+  marks: ["smoke"]

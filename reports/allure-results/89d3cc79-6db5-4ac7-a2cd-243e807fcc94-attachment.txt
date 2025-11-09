@@ -1,0 +1,1 @@
+selector=xpath=//div[contains(@class,'boxCenterList')]//p[contains(normalize-space(.),'用户名或密码错误')] | selector_failed=TimeoutException()

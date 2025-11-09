@@ -1,0 +1,92 @@
+- id: Ecshop-LOGIN-001
+  title: "正确账号密码登录成功"
+  input:
+    username: "ecshop"
+    password: "ecshop"
+    remember: false
+  expected:
+    ok: true
+#    landing: "/index.php"
+  marks: ["smoke", "regression"]
+
+- id: Ecshop-LOGIN-002
+  title: "使用错误用户名登录提示报错信息"
+  input:
+    username: "ecshop1"
+    password: "ecshop"
+    remember: false
+  expected:
+    ok: false
+    message_contains: "用户名或密码错误"
+    selector: "xpath=//div[contains(@class,'boxCenterList')]//p[contains(normalize-space(.),'用户名或密码错误')]"
+    wait: 15
+
+  marks: ["smoke", "negative"]
+
+- id: Ecshop-LOGIN-003
+  title: "使用错误密码登录提示报错信息"
+  input:
+    username: "ecshop"
+    password: "ecshop1"
+    remember: false
+  expected:
+    ok: false
+    message_contains: "用户名或密码错误"
+    selector: "xpath=//div[contains(@class,'boxCenterList')]//p[contains(normalize-space(.),'用户名或密码错误')]"
+    wait: 15
+  marks: ["smoke", "negative"]
+
+#- id: Ecshop-LOGIN-004
+#  title: "边界值密码测试 - 超出最大长度（max+1）"
+#  marks: ["regression"]
+#  input:
+#    username: "ecshop"
+#    password: "aaaaaaaaaaaaaaaaaaaaa"
+#    remember: false
+#  expected:
+#    ok: false
+#    message_contains: "密码格式错误"
+#    selector: "div.boxCenterList p[style*='color: red']"
+#    wait: 3
+#
+#- id: Ecshop-LOGIN-005
+#  title: "边界值密码测试 - 低于最小长度（min-1）"
+#  marks: ["regression"]
+#  input:
+#    username: "ecshop"
+#    password: "aaaaaaa"
+#    remember: false
+#  expected:
+#    ok: false
+#    message_contains: "密码格式错误"
+#    selector: "div.boxCenterList p[style*='color: red']"
+#    wait: 3
+#
+#
+#- id: Ecshop-LOGIN-006
+#  title: "用户名必填项测试"
+#  marks: ["regression", "negative"]
+#  input:
+#    username: ""
+#    password: "ecshop"
+#    remember: false
+#  expected:
+#    ok: false
+#    message_contains: "用户名不能为空"
+#    selector: "css=div.boxCenterList p[style*='color: red']"
+#    wait: 3
+#
+#
+#- id: Ecshop-LOGIN-007
+#  title: "密码必填项测试"
+#  marks: ["regression"]
+#  input:
+#    username: "ecshop"
+#    password: ""
+#    remember: false
+#  expected:
+#    ok: false
+#    message_contains: "密码不能为空"
+#    selector: "div.boxCenterList p[style*='color: red']"
+#    wait: 3
+

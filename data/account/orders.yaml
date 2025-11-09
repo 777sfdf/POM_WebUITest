@@ -1,0 +1,8 @@
+- id: ORD-LIST-001
+  title: 下单后订单列表可见最新订单
+  input:
+    filter: "all"
+  expected:
+    ok: true
+    latest_visible: true
+  marks: ["smoke"]

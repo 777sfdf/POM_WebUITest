@@ -1,0 +1,9 @@
+- id: CTLG-PDP-001
+  title: 商品详情页展示核心信息
+  input:
+    product_keyword: "nokia"
+  expected:
+    name_contains: ""
+    price_min: 1
+    in_stock: true
+  marks: ["smoke"]
