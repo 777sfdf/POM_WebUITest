@@ -84,7 +84,7 @@ pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 1. 打开原型页面脚本，修改用户名和密码
 `originalpages/masterFlow.py`  这个脚本就是原型页面测试的脚本
-2. 启动项目数据库
+2. 启动项目四数据库 (使用陆老师发的文件夹下的数据库)
 3. 运行原型测试：
    ```bash
    python ./originalpages/masterFlow.py
@@ -102,6 +102,10 @@ pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
    allure serve reports/allure-results
    ```
 4. 停止服务：按 `Ctrl+C` 然后输入 `y`
+5. 如果上边都测试完毕了 想使用一条命令解决自动测试 自动生成报告可以在控制台使用如下命令:
+   ```bash
+   python run.py --serve --background
+   ```
 
 ## 使用指南
 

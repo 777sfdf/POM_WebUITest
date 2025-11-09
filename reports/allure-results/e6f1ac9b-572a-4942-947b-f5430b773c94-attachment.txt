@@ -1,3 +1,0 @@
-[32mINFO    [0m project_TestWebUI:conftest.py:216 Loaded environment config for: dev
-[32mINFO    [0m project_TestWebUI:conftest.py:239 Using project local chromedriver at: D:\POM_WebUITest\drivers\chromedriver.exe
-[32mINFO    [0m project_TestWebUI:conftest.py:266 Final chromedriver executable: D:\POM_WebUITest\drivers\chromedriver.exe

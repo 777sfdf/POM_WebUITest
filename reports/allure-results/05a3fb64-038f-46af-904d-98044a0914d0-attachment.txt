@@ -1,1 +1,0 @@
-selector_used=False timeout=15
