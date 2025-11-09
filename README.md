@@ -84,7 +84,7 @@ pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 1. 打开原型页面脚本，修改用户名和密码
 `originalpages/masterFlow.py`  这个脚本就是原型页面测试的脚本
-2. 启动项目四数据库 (使用陆老师发的文件夹下的数据库)
+2. 启动项目数据库
 3. 运行原型测试：
    ```bash
    python ./originalpages/masterFlow.py
