@@ -4,3 +4,4 @@ pyyaml
 webdriver-manager
 allure-pytest==2.12.0
 openpyxl
+mss

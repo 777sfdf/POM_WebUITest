@@ -7,11 +7,6 @@ Usage:
   python stop_allure.py --pid-file path/to/file.pid
   python stop_allure.py --find      # Try to find running 'allure' processes (pgrep / wmic) and prompt to stop
   python stop_allure.py --force     # Kill without interactive confirmation (use with care)
-
-This script:
-- If a PID file exists (default reports/allure.pid) it will try a graceful terminate, wait, then force-kill if necessary.
-- If no PID file or --find is used, it will try to discover Allure processes and optionally stop them.
-- Works on Windows and Unix-like systems, using taskkill when necessary on Windows.
 """
 from __future__ import annotations
 import os
@@ -40,18 +35,49 @@ def read_pid_file(pid_file: str) -> int | None:
 
 
 def is_pid_running(pid: int) -> bool:
-    try:
-        # On Unix and Windows, os.kill(pid, 0) will raise if process does not exist.
-        os.kill(pid, 0)
-    except ProcessLookupError:
-        return False
-    except PermissionError:
-        # Process exists but we have no permission to signal it
-        return True
-    except OSError:
-        return False
+    """
+    Cross-platform check whether a process with given PID exists.
+    - On Windows: use tasklist CSV output and detect whether a process row is returned.
+    - On Unix-like: use os.kill(pid, 0).
+    """
+    if os.name == "nt":
+        try:
+            # Use CSV format without header for predictable output.
+            proc = subprocess.run(
+                ["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"],
+                capture_output=True,
+                text=True,
+            )
+            out = proc.stdout.strip()
+            err = proc.stderr.strip()
+            if proc.returncode != 0:
+                # tasklist failed; treat as not running but print diagnostics
+                if err:
+                    print(f"tasklist error: {err}")
+                return False
+            if not out:
+                return False
+            # If tasklist returns a CSV row, it begins with a double quote (image name quoted).
+            # If no match, many locales return a line beginning with "INFO:" or localized message.
+            if out.startswith('"'):
+                return True
+            # Otherwise treat as not found
+            return False
+        except Exception as e:
+            # On unexpected error, log and assume not running
+            print(f"is_pid_running (tasklist) failed: {e}")
+            return False
     else:
-        return True
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return False
+        except PermissionError:
+            return True
+        except OSError:
+            return False
+        else:
+            return True
 
 
 def terminate_pid(pid: int) -> bool:
@@ -62,14 +88,28 @@ def terminate_pid(pid: int) -> bool:
 
     try:
         print(f"Sending SIGTERM to PID {pid}...")
-        os.kill(pid, signal.SIGTERM)
+        if os.name == "nt":
+            # Try a graceful taskkill (without /F). Use run to capture output.
+            proc = subprocess.run(
+                ["taskkill", "/PID", str(pid)],
+                capture_output=True,
+                text=True,
+            )
+            if proc.returncode != 0:
+                # Print diagnostic but continue to waiting/force-kill phase
+                if proc.stdout:
+                    print("taskkill stdout:", proc.stdout.strip())
+                if proc.stderr:
+                    print("taskkill stderr:", proc.stderr.strip())
+        else:
+            os.kill(pid, signal.SIGTERM)
     except Exception as e:
-        print(f"Failed to send SIGTERM to {pid}: {e}")
+        print(f"Failed to send termination signal to {pid}: {e}")
 
     # Wait for a short period for the process to exit
     for i in range(WAIT_SECONDS_BEFORE_FORCE):
         if not is_pid_running(pid):
-            print(f"PID {pid} exited after SIGTERM.")
+            print(f"PID {pid} exited after TERM attempt.")
             return True
         time.sleep(1)
 
@@ -77,8 +117,21 @@ def terminate_pid(pid: int) -> bool:
 
     try:
         if os.name == "nt":
-            # Use taskkill for Windows to ensure child processes are killed as well
-            subprocess.check_call(["taskkill", "/PID", str(pid), "/F", "/T"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            proc = subprocess.run(
+                ["taskkill", "/PID", str(pid), "/F", "/T"],
+                capture_output=True,
+                text=True,
+            )
+            if proc.returncode != 0:
+                print(f"Force kill taskkill returned {proc.returncode}")
+                if proc.stdout:
+                    print("taskkill stdout:", proc.stdout.strip())
+                if proc.stderr:
+                    print("taskkill stderr:", proc.stderr.strip())
+            else:
+                # success
+                if proc.stdout:
+                    print("taskkill stdout:", proc.stdout.strip())
         else:
             os.kill(pid, signal.SIGKILL)
     except Exception as e:
@@ -95,7 +148,6 @@ def terminate_pid(pid: int) -> bool:
 
 
 def find_allure_pids_unix() -> list[int]:
-    """Use pgrep -f allure to find processes containing 'allure' in command line."""
     try:
         out = subprocess.check_output(["pgrep", "-f", "allure"], text=True, stderr=subprocess.DEVNULL)
         pids = [int(line.strip()) for line in out.strip().splitlines() if line.strip()]
@@ -107,9 +159,7 @@ def find_allure_pids_unix() -> list[int]:
 
 
 def find_allure_pids_windows() -> list[int]:
-    """Try to find allure processes on Windows using wmic or powershell."""
     pids = set()
-    # Try WMIC (older but commonly available)
     try:
         out = subprocess.check_output(
             ['wmic', 'process', 'where', "CommandLine LIKE '%allure%'", 'get', 'ProcessId,CommandLine', '/FORMAT:LIST'],
@@ -124,7 +174,6 @@ def find_allure_pids_windows() -> list[int]:
     except Exception:
         pass
 
-    # Try PowerShell if WMIC didn't find anything
     if not pids:
         try:
             ps_cmd = [
@@ -186,11 +235,14 @@ def main():
             return 0
         else:
             print("Failed to stop process recorded in PID file.")
-            # fallthrough to find option if requested
             if not args.find:
+                # If process is actually gone but script misdetected, try removing pid file proactively:
+                if not is_pid_running(pid):
+                    print("Process appears to be gone; removing stale PID file.")
+                    remove_pid_file(pid_file)
+                    return 0
                 return 1
 
-    # If no pid file or stopping by pid failed and --find specified, try to discover processes
     if args.find or pid is None:
         pids = find_allure_pids()
         if not pids:
@@ -215,7 +267,6 @@ def main():
             if not ok:
                 print(f"Warning: could not stop PID {p}")
                 rc = 1
-        # Try to remove PID file if exists
         remove_pid_file(pid_file)
         return rc
 

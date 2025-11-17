@@ -21,52 +21,64 @@
 
 ## 项目结构
 ```
-POM_WebUITest/
-├── common/                      # 通用工具类
+POM_WebUITest/                          # 主项目目录
+├── common/                             # 通用工具模块
 │   ├── __init__.py
-│   ├── config_utils.py         # 配置工具
-│   ├── logger.py               # 日志工具
-│   └── screenshot.py           # 截图工具
-├── config/                     # 配置文件目录
+│   ├── config_utils.py                # 配置文件读取工具类
+│   ├── logger.py                      # 日志记录工具类
+│   └── screenshot.py                  # 屏幕截图工具类
+├── config/                            # 配置文件目录
 │   ├── __init__.py
-│   ├── config.ini             # 主配置文件
-│   └── environment.yaml       # 环境配置
-├── data/                       # 测试数据目录
-│   ├── account/               # 账号模块数据
-│   │   ├── login.yaml
-│   │   ├── register.yaml
-│   │   └── orders.yaml
-│   ├── admin/                 # 管理模块数据
-│   ├── cart/                  # 购物车数据
-│   ├── catalog/               # 商品目录数据
-│   ├── checkout/              # 结算数据
-│   ├── payment/               # 支付数据
+│   ├── config.ini                     # 主配置文件
+│   └── environment.yaml               # 环境配置文件
+├── data/                              # 测试数据目录
+│   ├── account/                       # 账号模块数据
+│   │   ├── login.yaml                 # 登录测试数据
+│   │   ├── register.yaml              # 注册测试数据
+│   │   └── orders.yaml                # 订单数据
+│   ├── admin/                         # 管理模块数据
+│   ├── cart/                          # 购物车数据
+│   ├── catalog/                       # 商品目录数据
+│   ├── checkout/                      # 结算数据
+│   ├── payment/                       # 支付数据
 │   └── __init__.py
-├── drivers/                    # 浏览器驱动目录
+├── drivers/                           # 浏览器驱动目录
 │   ├── __init__.py
-│   ├── chromedriver.exe       # Chrome驱动
-│   └── msedgedriver.exe       # Edge驱动
-├── logs/                       # 日志文件目录
-├── originalpages/              # 原型页面和主流程
+│   ├── chromedriver.exe               # Chrome浏览器驱动
+│   └── msedgedriver.exe               # Edge浏览器驱动
+├── logs/                              # 日志文件目录
+├── originalpages/                     # 原始页面模块
 │   ├── __init__.py
-│   ├── loginDiffCase.py       # 登录反例场景测试
-│   └── masterFlow.py          # 主流程测试
-├── pageobjects/                # 页面对象模型目录
-│   ├── base/
-│   │   └── base_page.py       # 页面基类
-│   └── account/
-│       ├── login_page.py      # 登录页面
-│       └── register_page.py   # 注册页面
-├── reports/                    # 测试报告目录
-├── testcases/                  # 测试用例目录
-├── utils/                      # 工具类目录
-│   └── __init__.py
-├── conftest.py                # pytest配置文件
-├── pytest.ini                 # pytest配置
-├── README.md                  # 项目说明文档
-├── requirements.txt           # 项目依赖包
-├── run.py                     # 项目运行入口
-└── stop_allure.py             # 停止allure服务脚本
+│   ├── loginDiffCase.py              # 登录功能测试
+│   └── masterFlow.py                 # 主流程测试脚本
+├── pageobjects/                       # 页面对象模型目录
+│   ├── business/                     # 业务相关页面对象
+│   ├── core/                         # 核心功能页面对象
+│   │   └── base_page.py              # 页面基类
+│   ├── smoke/                        # 冒烟测试页面对象
+│   │   ├── CheckoutPage.py           # 结算页面对象
+│   │   ├── HomePage.py               # 首页页面对象
+│   │   ├── LoginPage.py              # 登录页面对象
+│   │   ├── OrderSuccessPage.py       # 订单成功页面对象
+│   │   ├── ProductDetailPage.py      # 商品详情页面对象
+│   │   └── SearchResultsPage.py      # 搜索结果页面对象
+├── reports/                           # 测试报告目录
+├── testcases/                         # 测试用例目录
+│   ├── business/                     # 业务测试用例
+│   ├── smoke/                        # 冒烟测试用例
+│   │   ├── test_01_homepage_smoke.py    # 首页冒烟测试
+│   │   ├── test_02_login_smoke.py       # 登录功能冒烟测试
+│   │   ├── test_03_search_results_smoke.py  # 搜索结果冒烟测试
+│   │   ├── test_04_product_detail_smoke.py  # 商品详情冒烟测试
+│   │   ├── test_05_shopping_cart_smoke.py   # 购物车冒烟测试
+│   │   ├── test_06_checkout_smoke.py        # 结算流程冒烟测试
+├── utils/                             # 工具类目录
+├── conftest.py                       # pytest配置文件
+├── pytest.ini                        # pytest初始化配置
+├── README.md                         # 项目说明文档
+├── requirements.txt                  # 项目依赖文件
+├── run.py                            # 项目运行入口
+└── stop_allure.py                    # Allure报告停止脚本
 ```
 
 
@@ -106,6 +118,11 @@ pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
    ```bash
    python run.py --serve --background
    ```
+6. 如果想停止allure服务 可以使用如下命令:
+`(5和6是配套使用的)`
+   ```bash
+   python stop_allure.py
+   ``` 
 
 ## 使用指南
 
