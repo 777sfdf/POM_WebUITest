@@ -1,6 +1,5 @@
 import os
 import pytest
-import allure
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
@@ -10,13 +9,11 @@ from common.logger import log
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 def pytest_addoption(parser):
     parser.addoption("--env", action="store", default="dev", help="test environment")
     parser.addoption("--browser", action="store", default="chrome", help="browser: chrome or firefox")
     parser.addoption("--headless", action="store_true", help="run in headless mode")
     parser.addoption("--use-local-driver", action="store_true", help="use driver from ./drivers folder if present")
-
 
 @pytest.fixture(scope="session")
 def config(request):
@@ -26,13 +23,11 @@ def config(request):
     log.info(f"Loaded environment config for: {env}")
     return env_config
 
-
 @pytest.fixture(scope="session")
 def browser(request, config):
     browser_name = request.config.getoption("--browser").lower()
     headless = request.config.getoption("--headless")
 
-    # 项目根目录（conftest 位于项目根）
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
     local_driver_path = os.path.join(project_root, "drivers", "chromedriver.exe")
 
@@ -43,7 +38,6 @@ def browser(request, config):
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
 
-    # 优先使用项目 drivers 下的固定版本
     driver_path_to_use = None
     if os.path.isfile(local_driver_path):
         log.info(f"Using project local chromedriver at: {local_driver_path}")
@@ -55,7 +49,6 @@ def browser(request, config):
         if os.path.isfile(driver_bin):
             driver_path_to_use = driver_bin
         else:
-            # 尝试在 webdriver_manager 缓存目录查找
             wdm_root = os.path.expanduser("~/.wdm")
             found = None
             for root, dirs, files in os.walk(wdm_root):
@@ -85,14 +78,10 @@ def browser(request, config):
     yield driver
     driver.quit()
 
-
-# 新增：别名 fixture，测试里可直接使用 driver（等同于 browser）
 @pytest.fixture(scope="session")
 def driver(browser):
     yield browser
 
-
-# 新增：base_url fixture，从 config/environment.yaml 读取
 @pytest.fixture(scope="session")
 def base_url(config):
     url = config.get("base_url") or config.get("url")
@@ -100,54 +89,88 @@ def base_url(config):
         raise RuntimeError("base_url not found in environment config (config/environment.yaml).")
     return url.rstrip("/")
 
-
-# 新增：每个用例后自动清理状态，满足“退出登录 + 清 Cookie/Storage + 回首页 + 刷新”
-@pytest.fixture(autouse=True, scope="function")
-def _reset_state_after_each_test(driver, base_url):
-    """
-    每个测试用例结束后：
-      1) 关闭可能遗留的 alert（避免阻塞后续操作）
-      2) 若可见则点击退出登录
-      3) 清理 localStorage / sessionStorage
-      4) 清理 Cookie
-      5) 回到首页并刷新，确保下个用例是未登录状态
-    """
-    yield
-
-    # 1) 关闭遗留 alert
+# --------- 状态清理与登出工具 ---------
+def _try_logout(driver, timeout: int = 2):
+    from selenium.webdriver.common.by import By
+    candidates = [
+        (By.CSS_SELECTOR, '#ECS_MEMBERZONE a[href*="user.php?act=logout"]'),
+        (By.XPATH, "//a[contains(@href,'user.php') and contains(@href,'act=logout')]"),
+        (By.LINK_TEXT, "退出"),
+        (By.PARTIAL_LINK_TEXT, "退出"),
+    ]
     try:
-        alert = WebDriverWait(driver, 1).until(EC.alert_is_present())
-        _ = alert.text  # 可记录
-        alert.accept()
+        for by, sel in candidates:
+            els = driver.find_elements(by, sel)
+            for el in els:
+                try:
+                    if el.is_displayed():
+                        el.click()
+                        try:
+                            WebDriverWait(driver, 1).until(EC.alert_is_present()).accept()
+                        except Exception:
+                            pass
+                        return True
+                except Exception:
+                    continue
     except Exception:
         pass
+    return False
 
-    # 2) 退出登录：使用已有的 LoginPage.logout()
+def _ensure_clean_state(driver, base_url):
+    """退出（若已登录）+ 清 Cookie + 回到首页并刷新"""
     try:
-        from pageobjects.business.account.LoginPage import LoginPage
-        LoginPage(driver, base_url).logout()
+        _try_logout(driver)
     except Exception:
         pass
-
-    # 3) 清理 Storage
-    try:
-        driver.execute_script("window.localStorage && window.localStorage.clear();")
-        driver.execute_script("window.sessionStorage && window.sessionStorage.clear();")
-    except Exception:
-        pass
-
-    # 4) 清理 Cookie
     try:
         driver.delete_all_cookies()
     except Exception:
         pass
-
-    # 5) 回首页并刷新
     try:
         driver.get(base_url)
-    except Exception:
-        pass
-    try:
         driver.refresh()
     except Exception:
         pass
+
+# --------- 全局 autouse 清理：默认每条用例结束清场；带 session_login 标记的模块内跳过 ---------
+@pytest.fixture(autouse=True, scope="function")
+def _reset_state_after_each_test(request, driver, base_url):
+    """
+    默认每条测试用例结束后：
+      1) 退出登录（若已登录）
+      2) 清理 Cookie
+      3) 回到首页并刷新
+    但若用例（或其上层模块）带有 @pytest.mark.session_login，则跳过（该模块内复用登录态）。
+    """
+    yield
+    if request.node.get_closest_marker("session_login"):
+        return
+    _ensure_clean_state(driver, base_url)
+
+# --------- 登录后业务链路：模块级复用登录态 ---------
+from pageobjects.smoke.HomePage import HomePage
+@pytest.fixture(scope="module")
+def session_logged_in(driver, base_url, config):
+    """
+    登录后链路模块使用：
+      - 模块开始前，清场一次；UI 登录一次
+      - 模块内各用例复用同一登录会话
+      - 模块结束统一登出清理
+    """
+    from pageobjects.smoke.LoginPage import LoginPage
+    username = config.get("username") or os.environ.get("TEST_USER")
+    password = config.get("password") or os.environ.get("TEST_PASS")
+    if not username or not password:
+        raise RuntimeError("未找到登录凭据，请在配置或环境变量 TEST_USER/TEST_PASS 中提供。")
+
+    # 模块开始前清场
+    _ensure_clean_state(driver, base_url)
+
+    # 登录一次
+    HomePage(driver, base_url).open().assert_welcome_visible().go_to_login()
+    LoginPage(driver, base_url).login(username, password).assert_login_success()
+
+    yield
+
+    # 模块结束清场
+    _ensure_clean_state(driver, base_url)

@@ -89,7 +89,7 @@ POM_WebUITest/                          # 主项目目录
 
 ```bash
 # 安装项目依赖
-pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ### 2. 原型页面测试
@@ -107,7 +107,7 @@ pip install -r ./requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 1. 修改 `data/account/login.yaml` 文件中的用户名和密码
 2. 运行冒烟测试：
    ```bash
-   pytest -m "smoke" -q --alluredir=reports/allure-results
+   pytest -m "smoke" -q --alluredir=reports/allure_results
    ```
 3. 生成测试报告：
    ```bash

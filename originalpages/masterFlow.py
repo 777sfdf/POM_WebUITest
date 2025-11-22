@@ -96,7 +96,7 @@ def login_and_assert_welcome():
         WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((
                 By.XPATH,
-                "//input[@name='payment' and @value='3']"
+                "//input[@name='payment' and @value='2']"
             ))
         ).click()
 

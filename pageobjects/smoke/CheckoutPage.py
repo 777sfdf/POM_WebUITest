@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class CheckoutPage:
     SHIPPING_OPTION = (By.XPATH, "//input[@name='shipping' and @value='5']")
-    PAYMENT_OPTION = (By.XPATH, "//input[@name='payment' and @value='3']")
+    PAYMENT_OPTION = (By.XPATH, "//input[@name='payment' and @value='2']")
     PACK_OPTION = (By.XPATH, "//input[@name='pack' and @value='1']")
     CARD_OPTION = (By.XPATH, "//input[@name='card' and @value='1']")
     HOW_OOS_OPTION = (By.XPATH, "//input[@name='how_oos' and @value='2']")
@@ -27,7 +27,7 @@ class CheckoutPage:
         return self
 
     def select_payment(self):
-        self.wait.until(EC.presence_of_element_located(self.PAYMENT_OPTION)).click()
+        self.wait.until(EC.element_to_be_clickable(self.PAYMENT_OPTION)).click()
         return self
 
     def select_pack(self):
